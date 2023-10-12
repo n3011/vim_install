@@ -14,7 +14,7 @@ Plugin 'VundleVim/Vundle.vim'
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
-Plugin 'scrooloose/nerdTree'
+Plugin 'preservim/nerdtree'
 Plugin 'tpope/vim-surround'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'tmhedberg/SimpylFold'
@@ -22,6 +22,11 @@ Plugin 'jnurmine/Zenburn'
 Plugin 'kien/ctrlp.vim'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'google/yapf', { 'rtp': 'plugins/vim' }
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'tpope/vim-fugitive'
+Plugin 'voldikss/vim-floaterm'
+Plugin 'dense-analysis/ale'
 
 
 map <C-Y> :call yapf#YAPF()<cr>
@@ -177,15 +182,12 @@ exec 'set tabstop='    .s:tabwidth
 exec 'set shiftwidth=' .s:tabwidth
 exec 'set softtabstop='.s:tabwidth
 
-let g:autopep8_indent_size=2
-let g:autopep8_max_line_length=101
-
-let g:ale_fixers = {'javascript': ['eslint'] }
-let g:ale_sign_error = '❌'
-let g:ale_sign_warning = '⚠️'
-let g:ale_fix_on_save = 1
-let b:ale_fixers = ['autopep8', 'yapf']
-let b:ale_indent_size=2
+let g:ale_fixers = {'javascript': ['eslint'], 'python': ['pylint']}
+let g:ale_type_map = {'pylint': {'ES': 'WS', 'E': 'W'}}
+let g:ale_set_highlights = 0
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_virtualtext_cursor = 'disabled'
 
 autocmd Filetype json setlocal ts=2 sw=2 expandtab
 set pastetoggle=<F3>
+let g:floaterm_keymap_toggle = '<F1>'
