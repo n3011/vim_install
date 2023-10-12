@@ -1,8 +1,6 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-set tabstop=4
-set shiftwidth=4
 set expandtab
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -20,15 +18,14 @@ Plugin 'scrooloose/nerdTree'
 Plugin 'tpope/vim-surround'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'tmhedberg/SimpylFold'
-Plugin 'scrooloose/syntastic'
 Plugin 'jnurmine/Zenburn'
 Plugin 'kien/ctrlp.vim'
-Plugin 'tpope/vim-fugitive'
-Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'vim-scripts/indentpython.vim'
-Plugin 'andviro/flake8-vim'
-Plugin 'Chiel92/vim-autoformat'
-Plugin 'tell-k/vim-autopep8'
+Plugin 'google/yapf', { 'rtp': 'plugins/vim' }
+
+
+map <C-Y> :call yapf#YAPF()<cr>
+imap <C-Y> <c-o>:call yapf#YAPF()<cr>
 
 " plugin from http://vim-scripts.org/vim/scripts.html
 " Git plugin not hosted on GitHub
@@ -58,15 +55,10 @@ autocmd VimEnter * wincmd p
 
 set number
 
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-set textwidth=79
 set expandtab
 set autoindent
 set fileformat=unix
 
-set paste
 set background=light
 " display settings
 set encoding=utf-8 " encoding used for displaying file
@@ -81,12 +73,13 @@ set nobackup " do not keep the backup~ file
 
 " edit settings
 set backspace=indent,eol,start " backspacing over everything in insert mode
-set expandtab " fill tabs with spaces
 set nojoinspaces " no extra space after '.' when joining lines
-set shiftwidth=8 " set indentation depth to 8 columns
-set softtabstop=8 " backspacing over 8 spaces like over tabs
-set tabstop=8 " set tabulator length to 8 columns
-set textwidth=80 " wrap lines automatically at 80th column
+set expandtab " fill tabs with spaces
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
+set tabstop=2 " set tabulator length to 8 columns
+set textwidth=101 " wrap lines automatically at 80th column
 
 " search settings
 set hlsearch " highlight search results
@@ -164,42 +157,35 @@ nnoremap <space> za
 let g:ycm_autoclose_preview_window_after_completion=1
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
-au BufWrite * :Autoformat
-let g:autoformat_autoindent = 0
-let g:autoformat_retab = 0
-let g:autoformat_remove_trailing_spaces = 0
-
 let python_highlight_all=1
 syntax on
-colorscheme zenburn
 
 set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
+set shiftwidth=2
+set statusline+=%F\ %l\:%c
 
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
 
-let g:syntastic_python_checkers=['flake8']
-let g:syntastic_python_flake8_args='--ignore=E501,E225,F403,F405,C901'
-let g:pep8_ignore='E123,E126,E128,E225,C901'
+set noexpandtab " Make sure that every file uses real tabs, not spaces
+set shiftround  " Round indent to multiple of 'shiftwidth'
+set smartindent " Do smart indenting when starting a new line
+set autoindent  " Copy indent from current line, over to the new line
 
-let g:flake8_show_quickfix=0  " don't show
+" Set the tab width
+let s:tabwidth=2
+exec 'set tabstop='    .s:tabwidth
+exec 'set shiftwidth=' .s:tabwidth
+exec 'set softtabstop='.s:tabwidth
 
-let g:PyFlakeOnWrite = 1
-let g:PyFlakeCheckers = 'pep8,mccabe,pyflakes'
-let g:PyFlakeDefaultComplexity=10
-let g:PyFlakeDisabledMessages = 'E501,E123,E126,E128,E225,C901'
-let g:PyFlakeCWindow = 6
-let g:PyFlakeSigns = 1
-let g:PyFlakeMaxLineLength = 500
-let g:PyFlakeRangeCommand = 'Q'
-set shiftwidth=4
+let g:autopep8_indent_size=2
+let g:autopep8_max_line_length=101
 
-let g:autopep8_indent_size=4
-let g:autopep8_max_line_length=79
+let g:ale_fixers = {'javascript': ['eslint'] }
+let g:ale_sign_error = '❌'
+let g:ale_sign_warning = '⚠️'
+let g:ale_fix_on_save = 1
+let b:ale_fixers = ['autopep8', 'yapf']
+let b:ale_indent_size=2
 
-"noremap <F8> :PymodeLintAuto<CR>
-" au FileType python setlocal formatprg=autopep8\ -
+autocmd Filetype json setlocal ts=2 sw=2 expandtab
+set pastetoggle=<F3>
